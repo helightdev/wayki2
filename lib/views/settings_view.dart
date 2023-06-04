@@ -38,6 +38,15 @@ class SettingsView extends StatelessWidget {
                   leading: Icon(FontAwesomeIcons.microchip),
                   title: Text("Bridge"),
                   description: Text(box.get("hue-bridge", defaultValue: "No bridge selected")),
+                  trailing: TextButton(onPressed: () {
+                    var initialContext = context;
+                    showDialog(context: context, builder: (context) => Dialog(
+                      child: TextField(onSubmitted: (s) {
+                        Navigator.pop(context);
+                        showBridgeConnecting(initialContext, s);
+                      },),
+                    ));
+                  }, child: Text("Manual IP"),),
                   onPressed: (context) {
                     showSearchBridgesDialog(context);
                   },

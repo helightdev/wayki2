@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hue/domain/repos/flutter_hue_maintenance_repo.dart';
 import 'package:flutter_hue/domain/repos/local_storage_repo.dart';
+import 'package:flutter_hue/domain/services/bridge_discovery_service.dart';
 import 'package:flutter_hue/flutter_hue.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:wayki2/blocs/clock_cubit.dart';
@@ -14,6 +15,7 @@ Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   WakelockService.keepAlive();
   FlutterHueMaintenanceRepo.maintainBridges();
+  BridgeDiscoveryService.discoverBridgesMdns().then((value) => print(value));
   await Hive.initFlutter();
   await Hive.openBox("scripts");
   await Hive.openBox("settings");

@@ -1,12 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 
 class ProcessService {
 
-  static void execFile(String file) async {
+  static Future execFile(String file) async {
     if (Platform.isLinux) {
       await Process.run("xdg-open", [file]);
     } else {
-      await Process.run("start", [file]);
+      await Process.run("powershell", ["-Command", "start", file]);
     }
   }
 
@@ -14,12 +15,15 @@ class ProcessService {
     File file;
     if (Platform.isLinux) {
       file = File("exec.sh");
+      file.writeAsStringSync(content);
+      await Process.run(file.absolute.path, []);
+      file.deleteSync();
     } else {
       file = File("exec.ps1");
+      file.writeAsStringSync(content);
+      await execFile(file.absolute.path);
+      //file.deleteSync();
     }
-    file.writeAsStringSync(content);
-    await Process.run(file.absolute.path, []);
-    file.deleteSync();
   }
 
 }
